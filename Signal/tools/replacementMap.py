@@ -11,6 +11,9 @@ globalReplacementMap['example'] = od()
 #  * use proc x cat with highest number of WV events
 globalReplacementMap['example']['procWV'] = "GG2H"
 globalReplacementMap['example']['catWV'] = "Untagged_Tag0"
+
+globalReplacementMap['example']['procWV'] = "wh_ALT_0M"
+globalReplacementMap['example']['catWV'] = "RECO_WH_LEP_Tag0"
 # For RIGHT VERTEX SCENARIO:
 #  * default you should add is diagonal process from given category 
 #  * if few events in diagonal process then may need to change the category aswell (see catRVMap)
@@ -18,10 +21,28 @@ globalReplacementMap['example']['catWV'] = "Untagged_Tag0"
 globalReplacementMap['example']['procRVMap'] = od()
 globalReplacementMap["example"]["procRVMap"]["Untagged_Tag0"] = "GG2H"
 globalReplacementMap["example"]["procRVMap"]["VBF_Tag0"] = "VBF"
+
+globalReplacementMap["example"]["procRVMap"]["RECO_WH_LEP_Tag0"] = "wh_ALT_0M"
+globalReplacementMap["example"]["procRVMap"]["RECO_WH_LEP_Tag1"] = "wh_ALT_0M"
+globalReplacementMap["example"]["procRVMap"]["RECO_WH_LEP_Tag2"] = "wh_ALT_0M"
+globalReplacementMap["example"]["procRVMap"]["RECO_WH_LEP_Tag3"] = "wh_ALT_0M"
+globalReplacementMap["example"]["procRVMap"]["RECO_WH_LEP_Tag4"] = "wh_ALT_0M"
+
+globalReplacementMap["example"]["procRVMap"]["RECO_ZH_LEP_Tag0"] = "zh_ALT_0M"
+globalReplacementMap["example"]["procRVMap"]["RECO_ZH_LEP_Tag1"] = "zh_ALT_0M"
+globalReplacementMap["example"]["procRVMap"]["RECO_ZH_LEP_Tag2"] = "zh_ALT_0M"
+globalReplacementMap["example"]["procRVMap"]["RECO_ZH_LEP_Tag3"] = "zh_ALT_0M"
+globalReplacementMap["example"]["procRVMap"]["RECO_ZH_LEP_Tag4"] = "zh_ALT_0M"
+
 # Replacement category for RV fit
 globalReplacementMap["example"]["catRVMap"] = od()
 globalReplacementMap["example"]["catRVMap"]["Untagged_Tag0"] = "Untagged_Tag0"
 globalReplacementMap["example"]["catRVMap"]["VBF_Tag0"] = "VBF_Tag0"
+
+globalReplacementMap["example"]["catRVMap"]["RECO_WH_LEP_Tag0"] = "RECO_WH_LEP_Tag0"
+globalReplacementMap["example"]["catRVMap"]["RECO_WH_LEP_Tag1"] = "RECO_WH_LEP_Tag0"
+globalReplacementMap["example"]["catRVMap"]["RECO_WH_LEP_Tag2"] = "RECO_WH_LEP_Tag0"
+globalReplacementMap["example"]["catRVMap"]["RECO_WH_LEP_Tag3"] = "RECO_WH_LEP_Tag0"
 
 
 # STXS analysis

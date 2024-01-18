@@ -1,12 +1,12 @@
 # Script to submit fit jobs
-import ROOT
 import os, sys
 import re
 from optparse import OptionParser
 import glob
 import json
+import ROOT
 
-print " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HGG SUBMIT FITS RUN II ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "
+print(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HGG SUBMIT FITS RUN II ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
 
 # subOpts for SGE e.g.: -l h_rt=3:0:0 -l h_vmem=24G -pe hep.pe 2
 
@@ -29,12 +29,12 @@ def get_options():
 (opt,args) = get_options()
 
 def leave():
-  print " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HGG SUBMIT FITS RUN II (END) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "
+  print(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HGG SUBMIT FITS RUN II (END) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
   exit(1)
 
 def run(cmd,opt):
   if opt.dryRun:
-    print "%s\n\n"%cmd
+    print("%s\n\n"%cmd)
   else:
     os.system(cmd)
 
@@ -71,9 +71,9 @@ elif( opt.batch == 'SGE' )|( opt.batch == 'IC' )|( opt.batch == 'lxbatch' ):
   sub_opts += "\'"
   job_opts = "--job-mode %s %s"%(opt.batch,sub_opts)
 elif opt.batch == "local":
-  print "--> Will print the commands to run combine without combineTool interactively\n\n"
+  print("--> Will print the commands to run combine without combineTool interactively\n\n")
 else:
-  print " --> [ERROR] Batch mode (%s) not supported. Leaving"%opt.batch
+  print(" --> [ERROR] Batch mode (%s) not supported. Leaving"%opt.batch)
   leave()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

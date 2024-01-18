@@ -1,0 +1,126 @@
+{
+    "signal": {
+        "2018": {
+            "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL18/raw/sig", 
+            "path_to_workspaces": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2018", 
+            "path_to_hadd": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Nov23/2018", 
+            "samples": {
+                "WHiggs0Mf05ph0ToGG": {
+                    "production_mode": "wh_ALT_0Mf05"
+                }, 
+                "WHiggs0MToGG": {
+                    "production_mode": "wh_ALT_0M"
+                }, 
+                "WHiggs0PMToGG": {
+                    "production_mode": "wh_ALT_0PM"
+                },
+                "ZHiggs0Mf05ph0ToGG": {
+                    "production_mode": "zh_ALT_0Mf05"
+                }, 
+                "ZHiggs0MToGG": {
+                    "production_mode": "zh_ALT_0M"
+                }, 
+                "ZHiggs0PMToGG": {
+                    "production_mode": "zh_ALT_0PM"
+                }
+            }
+        }, 
+        "2017": {
+            "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL17/raw/sig", 
+            "path_to_workspaces": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2017", 
+            "path_to_hadd": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Nov23/2017", 
+            "samples": {
+                "WHiggs0Mf05ph0ToGG": {
+                    "production_mode": "wh_ALT_0Mf05"
+                }, 
+                "WHiggs0MToGG": {
+                    "production_mode": "wh_ALT_0M"
+                }, 
+                "WHiggs0PMToGG": {
+                    "production_mode": "wh_ALT_0PM"
+                },
+                "ZHiggs0Mf05ph0ToGG": {
+                    "production_mode": "zh_ALT_0Mf05"
+                }, 
+                "ZHiggs0MToGG": {
+                    "production_mode": "zh_ALT_0M"
+                }, 
+                "ZHiggs0PMToGG": {
+                    "production_mode": "zh_ALT_0PM"
+                }
+            }
+        }, 
+        "2016preVFP": {
+            "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL16preVFP/raw/sig", 
+            "path_to_workspaces": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2016preVFP", 
+            "path_to_hadd": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Nov23/2016preVFP", 
+            "samples": {
+                "WHiggs0Mf05ph0ToGG": {
+                    "production_mode": "wh_ALT_0Mf05"
+                }, 
+                "WHiggs0MToGG": {
+                    "production_mode": "wh_ALT_0M"
+                }, 
+                "WHiggs0PMToGG": {
+                    "production_mode": "wh_ALT_0PM"
+                },
+                "ZHiggs0Mf05ph0ToGG": {
+                    "production_mode": "zh_ALT_0Mf05"
+                }, 
+                "ZHiggs0MToGG": {
+                    "production_mode": "zh_ALT_0M"
+                }, 
+                "ZHiggs0PMToGG": {
+                    "production_mode": "zh_ALT_0PM"
+                }
+            }
+        }, 
+        "2016postVFP": {
+            "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL16postVFP/raw/sig", 
+            "path_to_workspaces": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2016postVFP", 
+            "path_to_hadd": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Nov23/2016postVFP", 
+            "samples": {
+                "WHiggs0Mf05ph0ToGG": {
+                    "production_mode": "wh_ALT_0Mf05"
+                }, 
+                "WHiggs0MToGG": {
+                    "production_mode": "wh_ALT_0M"
+                }, 
+                "WHiggs0PMToGG": {
+                    "production_mode": "wh_ALT_0PM"
+                },
+                "ZHiggs0Mf05ph0ToGG": {
+                    "production_mode": "zh_ALT_0Mf05"
+                }, 
+                "ZHiggs0MToGG": {
+                    "production_mode": "zh_ALT_0M"
+                }, 
+                "ZHiggs0PMToGG": {
+                    "production_mode": "zh_ALT_0PM"
+                }
+            }
+        }
+    }, 
+    "data": {
+        "2018": {
+            "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_26_VH_Sys_v3_XS1_BDTv3_UsingRamCatalog/UL18/raw/data", 
+            "path_to_workspaces": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2018", 
+            "path_to_hadd": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Nov23/2018"
+        }, 
+        "2017": {
+            "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_18_VH_Sys_v3_XS1_BDTv3_masked_datafiles_v2/UL17/raw/data", 
+            "path_to_workspaces": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2017", 
+            "path_to_hadd": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Nov23/2017"
+        }, 
+        "2016preVFP": {
+            "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_18_VH_Sys_v3_XS1_BDTv3_masked_datafiles_v2/UL16preVFP/raw/data", 
+            "path_to_workspaces": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2016preVFP", 
+            "path_to_hadd": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Nov23/2016preVFP"
+        }, 
+        "2016postVFP": {
+            "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_26_VH_Sys_v3_XS1_BDTv3_UsingRamCatalog/UL16postVFP/raw/data", 
+            "path_to_workspaces": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2016postVFP", 
+            "path_to_hadd": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Nov23/2016postVFP"
+        }
+    }
+}

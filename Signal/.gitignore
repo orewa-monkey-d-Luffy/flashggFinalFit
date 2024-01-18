@@ -1,0 +1,10 @@
+outdir_*/
+Nov23_*/
+old_scripts/*
+
+# temporary files
+foo
+bar
+
+# processed signal folders
+2023_07_13_ANOM_STXS_scaled/

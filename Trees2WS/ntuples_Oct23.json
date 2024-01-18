@@ -1,0 +1,96 @@
+{
+    "signal": {
+        "2018": {
+            "path_to_workspace": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Oct23/UL18/", 
+            "samples": {
+                "WHiggs0Mf05ph0ToGG": {
+                    "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL18/raw/sig/",
+                    "path": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Oct23/UL18/output_WHiggs0Mf05ph0ToGG_M125_TuneCP5_13TeV-JHUGenV7011-pythia8.root",
+                    "production_mode": "wh_ALT_0Mf05"
+                }, 
+                "WHiggs0MToGG": {
+                    "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL18/raw/sig/",
+                    "path": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Oct23/UL18/output_WHiggs0MToGG_M125_TuneCP5_13TeV-JHUGenV7011-pythia8.root",
+                    "production_mode": "wh_ALT_0M"
+                }, 
+                "WHiggs0PMToGG": {
+                    "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL18/raw/sig/",
+                    "path": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Oct23/UL18/output_WHiggs0PMToGG_M125_TuneCP5_13TeV-JHUGenV7011-pythia8.root",
+                    "production_mode": "wh_ALT_0PM"
+                }
+            }
+        }, 
+        "2017": {
+            "path_to_workspace": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Oct23/UL17/", 
+            "samples": {
+                "WHiggs0Mf05ph0ToGG": {
+                    "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL17/raw/sig/",
+                    "path": "", 
+                    "production_mode": "wh_ALT_0Mf05"
+                }, 
+                "WHiggs0MToGG": {
+                    "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL17/raw/sig/",
+                    "path": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Oct23/UL17/output_WHiggs0MToGG_M125_TuneCP5_13TeV-JHUGenV7011-pythia8.root",
+                    "production_mode": "wh_ALT_0M"
+                }, 
+                "WHiggs0PMToGG": {
+                    "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL17/raw/sig/",
+                    "path": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Oct23/UL17/output_WHiggs0PMToGG_M125_TuneCP5_13TeV-JHUGenV7011-pythia8.root",
+                    "production_mode": "wh_ALT_0PM"
+                }
+            }
+        }, 
+        "2016pre": {
+            "path_to_workspace": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Oct23/UL16pre/", 
+            "samples": {
+                "WHiggs0Mf05ph0ToGG": {
+                    "path": "", 
+                    "production_mode": "wh_ALT_0Mf05"
+                }, 
+                "WHiggs0MToGG": {
+                    "path": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Oct23/UL16/output_WHiggs0MToGG_M125_TuneCP5_13TeV-JHUGenV7011-pythia8.root",
+                    "production_mode": "wh_ALT_0M"
+                }, 
+                "WHiggs0PMToGG": {
+                    "path": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Oct23/UL16/output_WHiggs0PMToGG_M125_TuneCP5_13TeV-JHUGenV7011-pythia8.root",
+                    "production_mode": "wh_ALT_0PM"
+                }
+            }
+        }, 
+        "2016post": {
+            "path_to_workspace": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Oct23/UL16post", 
+            "samples": {
+                "WHiggs0Mf05ph0ToGG": {
+                    "path": "", 
+                    "production_mode": "wh_ALT_0Mf05"
+                }, 
+                "WHiggs0MToGG": {
+                    "path": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Oct23/UL16/output_WHiggs0MToGG_M125_TuneCP5_13TeV-JHUGenV7011-pythia8.root",
+                    "production_mode": "wh_ALT_0M"
+                }, 
+                "WHiggs0PMToGG": {
+                    "path": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Oct23/UL16/output_WHiggs0PMToGG_M125_TuneCP5_13TeV-JHUGenV7011-pythia8.root",
+                    "production_mode": "wh_ALT_0PM"
+                }
+            }
+        }
+    }, 
+    "data": {
+        "2018": {
+            "path": "", 
+            "path_to_workspaces": ""
+        }, 
+        "2017": {
+            "path": "", 
+            "path_to_workspaces": ""
+        }, 
+        "2016pre": {
+            "path": "", 
+            "path_to_workspaces": ""
+        }, 
+        "2016post": {
+            "path": "", 
+            "path_to_workspaces": ""
+        }
+    }
+}

@@ -70,6 +70,7 @@ if opt.doSystematics:
   print " --> Extracting factory types for systematics"
   experimentalFactoryType = {}
   theoryFactoryType = {}
+  print(data.head())
   mask = (~data['cat'].str.contains("NOTAG"))&(data['type']=='sig')
   for s in experimental_systematics:
     if s['type'] == 'factory': 

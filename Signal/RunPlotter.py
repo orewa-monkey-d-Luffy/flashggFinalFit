@@ -33,13 +33,16 @@ def get_options():
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
 
-# Extract input files: for first file extract xvar
+# Extract input files: for first file extract 
+xvar = None
 inputFiles = od()
 citr = 0
 if opt.cats in ['all','wall']:
-  fs = glob.glob("%s/outdir_%s/CMS-HGG_sigfit_%s_*.root"%(swd__,opt.ext,opt.ext))
+  fname="%s/outdir_%s/signalFit/output/CMS-HGG_sigfit_%s_*.root"%(swd__,opt.ext,opt.ext)
+  fs = glob.glob(fname)
   for f in fs:
     cat = re.sub(".root","",f.split("/")[-1].split("_%s_"%opt.ext)[-1])
+    print(f)
     inputFiles[cat] = f
     if citr == 0:
       w = ROOT.TFile(f).Get("wsig_13TeV")
@@ -48,12 +51,23 @@ if opt.cats in ['all','wall']:
       xvar.setUnit(opt.xvar.split(":")[2])
       alist = ROOT.RooArgList(xvar)
     citr += 1
+elif opt.years=='2016preVFP,2016postVFP,2017,2018' or opt.years=='2017,2018':
+  for cat in opt.cats.split(","):
+    fname="%s/outdir_%s/signalFit/output/CMS-HGG_sigfit_%s_%s.root"%(swd__,opt.ext,opt.ext,cat)
+    inputFiles[cat] = fname
+    if citr == 0:
+      w = ROOT.TFile(fname).Get("wsig_13TeV")
+      xvar = w.var(opt.xvar.split(":")[0])
+      xvar.setPlotLabel(opt.xvar.split(":")[1])
+      xvar.setUnit(opt.xvar.split(":")[2])
+      alist = ROOT.RooArgList(xvar)
+    citr += 1  
 else:
   for cat in opt.cats.split(","):
-    f = "%s/outdir_%s/CMS-HGG_sigfit_%s_%s.root"%(swd__,opt.ext,opt.ext,cat)
-    inputFiles[cat] = f
+    fname = "%s/outdir_%s/signalFit/output/CMS-HGG_sigfit_%s_%s_%s_%s.root"%(swd__,opt.ext,opt.ext,opt.procs,opt.years,cat)
+    inputFiles[cat] = fname
     if citr == 0:
-      w = ROOT.TFile(f).Get("wsig_13TeV")
+      w = ROOT.TFile(fname).Get("wsig_13TeV")
       xvar = w.var(opt.xvar.split(":")[0])
       xvar.setPlotLabel(opt.xvar.split(":")[1])
       xvar.setUnit(opt.xvar.split(":")[2])
@@ -85,6 +99,7 @@ for cat,f in inputFiles.iteritems():
   data_rwgt = od()
   hpdfs = od()
   for year in opt.years.split(","):
+    print(opt.procs)
     if opt.procs == 'all':
       allNorms = w.allFunctions().selectByName("*%s*normThisLumi"%year)
       for norm in rooiter(allNorms):
@@ -94,7 +109,7 @@ for cat,f in inputFiles.iteritems():
         norms[k] = w.function("%s_%s_normThisLumi"%(outputWSObjectTitle__,_id))
     else:
       for proc in opt.procs.split(","):
-        k = "%s__%s"%(proc,year)
+        k = "%s_%s"%(proc,year)
         _id = "%s_%s_%s_%s"%(proc,year,cat,sqrts__)
         norms[k] = w.function("%s_%s_normThisLumi"%(outputWSObjectTitle__,_id))
 
@@ -102,13 +117,16 @@ for cat,f in inputFiles.iteritems():
   # Iterate over norms: extract total category norm
   catNorm = 0
   for k, norm in norms.iteritems():
-    proc, year = k.split("__")
+    klist = k.split('_')
+    proc, year = '_'.join(klist[:-1]), klist[-1]
+    print(k, norm)
     w.var("IntLumi").setVal(lumiScaleFactor*lumiMap[year])
     catNorm += norm.getVal()
 
   # Iterate over norms and extract data sets + pdfs
   for k, norm in norms.iteritems():
-    proc, year = k.split("__")
+    klist = k.split('_')
+    proc, year = '_'.join(klist[:-1]), klist[-1]
     _id = "%s_%s_%s_%s"%(proc,year,cat,sqrts__)
     w.var("IntLumi").setVal(lumiScaleFactor*lumiMap[year])
 
@@ -117,6 +135,7 @@ for cat,f in inputFiles.iteritems():
     if nval < opt.threshold*catNorm: continue # Prune processes which contribute less that threshold of signal mod
 
     # Make empty copy of dataset
+    print(_id)
     d = w.data("sig_mass_m%s_%s"%(opt.mass,_id))
     d_rwgt = d.emptyClone(_id)
     
@@ -164,7 +183,7 @@ for cat,f in inputFiles.iteritems():
   fin.Close()
 
 # Make plot
-outdir="%s/%s/Plots"%(opt.outdir,opt.ext)
+outdir="%s/outdir_%s/Plots"%(opt.outdir,opt.ext)
 if not os.path.isdir(outdir): os.system("mkdir -p %s"%outdir)
 if os.path.exists("/afs/cern.ch"): os.system("cp /afs/cern.ch/user/g/gpetrucc/php/index.php "+outdir)
 elif os.path.exists("/cmshome/dimarcoe"): os.system("cp /cmshome/dimarcoe/php/index.php "+outdir)

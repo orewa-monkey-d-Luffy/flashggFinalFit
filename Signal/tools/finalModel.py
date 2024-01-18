@@ -137,7 +137,7 @@ class FinalModel:
   def buildXSBRSplines(self):
     mh = np.linspace(120.,130.,101)
     # the alternative models have only the nominal mass. Take the trends from the SM one
-    if "ALT" in self.proc: self.proc = self.proc.split("_")[0]
+    #if "ALT" in self.proc: self.proc = self.proc.split("_")[0]
     # XS
     fp = self.xsbrMap[self.proc]['factor'] if 'factor' in self.xsbrMap[self.proc] else 1.
     mp = self.xsbrMap[self.proc]['mode']

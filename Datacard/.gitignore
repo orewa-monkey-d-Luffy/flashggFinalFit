@@ -1,0 +1,12 @@
+yields_*/
+*bkp
+systematics.py.signal
+
+#temporary files
+
+foo
+bar
+
+# scripts
+
+doDatacard.sh

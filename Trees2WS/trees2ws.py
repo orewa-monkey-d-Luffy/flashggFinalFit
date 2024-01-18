@@ -113,6 +113,7 @@ if opt.year == '2018': systematics.append("JetHEM")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # UPROOT file
+print(opt.inputTreeFile)
 f = uproot.open(opt.inputTreeFile)
 if inputTreeDir == '': listOfTreeNames == f.keys()
 else: listOfTreeNames = f[inputTreeDir].keys()

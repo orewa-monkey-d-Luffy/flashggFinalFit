@@ -17,7 +17,7 @@ def writePreamble(f,options):
 def writeProcesses(f,d,options):
   f.write("\n")
   # If opt.prune then remove all rows from dataFrame with prune=1
-  d = d[d['prune']==0]
+  if options.prune: d = d[d['prune']==0]
   # d = Pandas DataFrame
   # Shapes
   # Loop over categories in dataframe
@@ -80,7 +80,8 @@ def writeSystematic(f,d,s,options,stxsMergeScheme=None,scaleCorrScheme=None):
  
   # Else: for yield variation uncertainties...
   # Remove all rows from dataFrame with prune=1 (includes NoTag)
-  mask = (d['prune']==0)
+  mask = d['year']!=''
+  if options.prune: mask = (d['prune']==0)
   d = d[mask]
 
   # If theory: loop over tiers else run over once

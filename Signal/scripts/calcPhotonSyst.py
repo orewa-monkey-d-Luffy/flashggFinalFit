@@ -36,125 +36,138 @@ def get_options():
   parser.add_option("--thresholdSigma", dest='thresholdSigma', default=0.5, type='float', help='Reject mean variations if larger than thresholdSigma')
   parser.add_option("--thresholdRate", dest='thresholdRate', default=0.05, type='float', help='Reject mean variations if larger than thresholdRate')
   return parser.parse_args()
-(opt,args) = get_options()
-
-# RooRealVar to fill histograms
-mgg = ROOT.RooRealVar(opt.xvar,opt.xvar,125)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Function to extact histograms from WS
-def getHistograms( _ws, _nominalDataName, _sname ):
-  _hists = {}
-  # Define histograms
-  for htype in ['nominal','up','down']:
-    if htype == 'nominal': _hists[htype] = ROOT.TH1F(htype,htype,opt.nBins,100,180)
-    else: _hists[htype] = ROOT.TH1F("%s_%s"%(_sname,htype),"%s_%s"%(_sname,htype),opt.nBins,100,180)
-  # Extract nominal RooDataSet and syst RooDataHists
-  rds_nominal = _ws.data(_nominalDataName)
-  rdh_up = _ws.data("%s_%sUp01sigma"%(_nominalDataName,_sname))
-  rdh_down = _ws.data("%s_%sDown01sigma"%(_nominalDataName,_sname))
-  # Check if not NONE type and fill histograms
-  if rds_nominal: rds_nominal.fillHistogram(_hists['nominal'],ROOT.RooArgList(mgg))
-  else:
-    print " --> [ERROR] Could not extract nominal RooDataSet: %s. Leaving"%_nominalDataName
-    sys,exit(1)
-  if rdh_up: rdh_up.fillHistogram(_hists['up'],ROOT.RooArgList(mgg))
-  else:
-    print " --> [ERROR] Could not extract RooDataHist (%s,up) for %s. Leaving"%(_sname,_nominalDataName)
-    sys,exit(1)
-  if rdh_down: rdh_down.fillHistogram(_hists['down'],ROOT.RooArgList(mgg))
-  else:
-    print " --> [ERROR] Could not extract RooDataHist (%s,down) for %s. Leaving"%(_sname,_nominalDataName)
-    sys,exit(1) 
-  return _hists
+def calcPhotonSyst(opt):
+  
+  mgg = ROOT.RooRealVar(opt.xvar,opt.xvar,125) # RooRealVar to fill histograms
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Functions to extract mean, sigma and rate variations
-def getMeanVar(_hists):
-  mu, muVar = {}, {}
-  for htype,h in _hists.iteritems(): mu[htype] = h.GetMean()
-  if mu['nominal']==0: return 0
-  for htype in ['up','down']: muVar[htype] = (mu[htype]-mu['nominal'])/mu['nominal']
-  x = (abs(muVar['up'])+abs(muVar['down']))/2
-  # Check for NaN
-  if x!=x: return 0
-  else: return min(x,opt.thresholdMean)
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Function to extact histograms from WS
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  def getHistograms( _ws, _nominalDataName, _sname ):
+    _hists = {}
+    # Define histograms
+    for htype in ['nominal','up','down']:
+      if htype == 'nominal': _hists[htype] = ROOT.TH1F(htype,htype,opt.nBins,100,180)
+      else: _hists[htype] = ROOT.TH1F("%s_%s"%(_sname,htype),"%s_%s"%(_sname,htype),opt.nBins,100,180)
+    # Extract nominal RooDataSet and syst RooDataHists
+    rds_nominal = _ws.data(_nominalDataName)
+    rdh_up = _ws.data("%s_%sUp01sigma"%(_nominalDataName,_sname))
+    rdh_down = _ws.data("%s_%sDown01sigma"%(_nominalDataName,_sname))
+    # Check if not NONE type and fill histograms
+    if rds_nominal: rds_nominal.fillHistogram(_hists['nominal'],ROOT.RooArgList(mgg))
+    else:
+      print " --> [ERROR] Could not extract nominal RooDataSet: %s. Leaving"%_nominalDataName
+      sys,exit(1)
+    if rdh_up: rdh_up.fillHistogram(_hists['up'],ROOT.RooArgList(mgg))
+    else:
+      print " --> [ERROR] Could not extract RooDataHist (%s,up) for %s. Leaving"%(_sname,_nominalDataName)
+      sys,exit(1)
+    if rdh_down: rdh_down.fillHistogram(_hists['down'],ROOT.RooArgList(mgg))
+    else:
+      print " --> [ERROR] Could not extract RooDataHist (%s,down) for %s. Leaving"%(_sname,_nominalDataName)
+      sys,exit(1) 
+    return _hists
 
-def getSigmaVar(_hists):
-  sigma, sigmaVar = {}, {}
-  for htype,h in _hists.iteritems(): sigma[htype] = getEffSigma(h)
-  if sigma['nominal']==0: return 0
-  for htype in ['up','down']: sigmaVar[htype] = (sigma[htype]-sigma['nominal'])/sigma['nominal']
-  x = (abs(sigmaVar['up'])+abs(sigmaVar['down']))/2
-  if x!=x: return 0
-  else: return min(x,opt.thresholdSigma)
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Functions to extract mean, sigma and rate variations
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  def getMeanVar(_hists):
+    mu, muVar = {}, {}
+    for htype,h in _hists.iteritems(): mu[htype] = h.GetMean()
+    if mu['nominal']==0: return 0
+    for htype in ['up','down']: muVar[htype] = (mu[htype]-mu['nominal'])/mu['nominal']
+    x = (abs(muVar['up'])+abs(muVar['down']))/2
+    # Check for NaN
+    if x!=x: return 0
+    else: return min(x,opt.thresholdMean)
 
-def getRateVar(_hists):
-  rate, rateVar = {}, {}
-  for htype,h in _hists.iteritems(): rate[htype] = h.Integral()
-  # Shape variations can both be one sided therefore use midpoint as nominal
-  rate['midpoint'] = 0.5*(rate['up']+rate['down'])
-  if rate['midpoint']==0: return 0
-  for htype in ['up','down']: rateVar[htype] = (rate[htype]-rate['midpoint'])/rate['midpoint']
-  x = (abs(rateVar['up'])+abs(rateVar['down']))/2
-  if x!=x: return 0
-  else: return min(x,opt.thresholdRate)
+  def getSigmaVar(_hists):
+    sigma, sigmaVar = {}, {}
+    for htype,h in _hists.iteritems(): sigma[htype] = getEffSigma(h)
+    if sigma['nominal']==0: return 0
+    for htype in ['up','down']: sigmaVar[htype] = (sigma[htype]-sigma['nominal'])/sigma['nominal']
+    x = (abs(sigmaVar['up'])+abs(sigmaVar['down']))/2
+    if x!=x: return 0
+    else: return min(x,opt.thresholdSigma)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Define dataFrame
-columns_data = ['proc','cat','inputWSFile','nominalDataName']
-for stype in ['scales','scalesCorr','smears']:
-  systs = getattr( opt, stype )
-  for s in systs.split(","):
-    if s == '': continue
-    for x in ['mean','sigma','rate']: columns_data.append("%s_%s_%s"%(s,outputNuisanceExtMap[stype],x))
-data = pd.DataFrame( columns=columns_data ) 
-
-# Loop over processes and add row to dataframe
-for _proc in opt.procs.split(","):
-  # Glob M125 filename
-  _WSFileName = glob.glob("%s/output*M125*%s.root"%(opt.inputWSDir,_proc))[0]
-  _nominalDataName = "%s_125_%s_%s"%(procToData(_proc),sqrts__,opt.cat)
-  data = data.append({'proc':_proc,'cat':opt.cat,'inputWSFile':_WSFileName,'nominalDataName':_nominalDataName}, ignore_index=True, sort=False)
-
-# Loop over rows in dataFrame and open ws
-for ir,r in data.iterrows():
-
-  print " --> Processing (%s,%s)"%(r['proc'],opt.cat)
-
-  # Open ROOT file and extract workspace
-  f = ROOT.TFile(r['inputWSFile'])
-  inputWS = f.Get(inputWSName__)
- 
-  # Loop over scale and smear systematics
+  def getRateVar(_hists):
+    rate, rateVar = {}, {}
+    for htype,h in _hists.iteritems(): rate[htype] = h.Integral()
+    # Shape variations can both be one sided therefore use midpoint as nominal
+    rate['midpoint'] = 0.5*(rate['up']+rate['down'])
+    if rate['midpoint']==0: return 0
+    for htype in ['up','down']: rateVar[htype] = (rate[htype]-rate['midpoint'])/rate['midpoint']
+    x = (abs(rateVar['up'])+abs(rateVar['down']))/2
+    if x!=x: return 0
+    else: return min(x,opt.thresholdRate)
+  
+  # Define dataFrame
+  columns_data = ['proc','cat','inputWSFile','nominalDataName']
   for stype in ['scales','scalesCorr','smears']:
-    for s in getattr(opt,stype).split(","):
+    systs = getattr( opt, stype )
+    for s in systs.split(","):
       if s == '': continue
-      sname = "%s%s"%(inputNuisanceExtMap[stype],s)
-      #print "    * Systematic = %s (%s)"%(sname,stype)
-      hists = getHistograms(inputWS,r['nominalDataName'],sname)
-      # If nominal yield = 0:
-      if hists['nominal'].Integral() == 0: _meanVar, _sigmaVar, _rateVar = 0, 0, 0
-      else:
-	_meanVar = getMeanVar(hists)
-	_sigmaVar = getSigmaVar(hists)
-	_rateVar = getRateVar(hists)
-      # Add values to dataFrame
-      data.at[ir,'%s_%s_mean'%(s,outputNuisanceExtMap[stype])] = _meanVar
-      data.at[ir,'%s_%s_sigma'%(s,outputNuisanceExtMap[stype])] = _sigmaVar
-      data.at[ir,'%s_%s_rate'%(s,outputNuisanceExtMap[stype])] = _rateVar
-
-      # Delete histograms
-      for h in hists.itervalues(): h.Delete()
-
-  # Delete ws and close file
-  inputWS.Delete()
+      for x in ['mean','sigma','rate']: columns_data.append("%s_%s_%s"%(s,outputNuisanceExtMap[stype],x))
+  data = pd.DataFrame( columns=columns_data ) 
+  
+  # Loop over processes and add row to dataframe
+  for _proc in opt.procs.split(","):
+    # Glob M125 filename
+    print("%s/output*M125*%s.root"%(opt.inputWSDir,_proc))
+    _WSFileName = glob.glob("%s/output*M125*%s.root"%(opt.inputWSDir,_proc))[0]
+    _nominalDataName = "%s_125_%s_%s"%(procToData(_proc),sqrts__,opt.cat)
+    data = data.append({'proc':_proc,'cat':opt.cat,'inputWSFile':_WSFileName,'nominalDataName':_nominalDataName}, ignore_index=True, sort=False)
+  
+  # Loop over rows in dataFrame and open ws
+  for ir,r in data.iterrows():
+  
+    print " --> Processing (%s,%s)"%(r['proc'],opt.cat)
+  
+    # Open ROOT file and extract workspace
+    f = ROOT.TFile(r['inputWSFile'])
+    inputWS = f.Get(inputWSName__)
+  
+    # Loop over scale and smear systematics
+    for stype in ['scales','scalesCorr','smears']:
+      for s in getattr(opt,stype).split(","):
+        if s == '': continue
+        sname = "%s%s"%(inputNuisanceExtMap[stype],s)
+        #print "    * Systematic = %s (%s)"%(sname,stype)
+        hists = getHistograms(inputWS,r['nominalDataName'],sname)
+        # If nominal yield = 0:
+        if hists['nominal'].Integral() == 0: _meanVar, _sigmaVar, _rateVar = 0, 0, 0
+        else:
+          _meanVar = getMeanVar(hists)
+          _sigmaVar = getSigmaVar(hists)
+          _rateVar = getRateVar(hists)
+        # Add values to dataFrame
+        data.at[ir,'%s_%s_mean'%(s,outputNuisanceExtMap[stype])] = _meanVar
+        data.at[ir,'%s_%s_sigma'%(s,outputNuisanceExtMap[stype])] = _sigmaVar
+        data.at[ir,'%s_%s_rate'%(s,outputNuisanceExtMap[stype])] = _rateVar
+  
+        # Delete histograms
+        for h in hists.itervalues(): h.Delete()
+  
+    # Delete ws and close file
+    inputWS.Delete()
   f.Close()
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Output dataFrame as pickle file to be read in by signalFit.py
-if not os.path.isdir("%s/outdir_%s"%(swd__,opt.ext)): os.system("mkdir %s/outdir_%s"%(swd__,opt.ext))
-if not os.path.isdir("%s/outdir_%s/calcPhotonSyst"%(swd__,opt.ext)): os.system("mkdir %s/outdir_%s/calcPhotonSyst"%(swd__,opt.ext))
-if not os.path.isdir("%s/outdir_%s/calcPhotonSyst/pkl"%(swd__,opt.ext)): os.system("mkdir %s/outdir_%s/calcPhotonSyst/pkl"%(swd__,opt.ext))
-with open("%s/outdir_%s/calcPhotonSyst/pkl/%s.pkl"%(swd__,opt.ext,opt.cat),"wb") as f: pickle.dump(data,f) 
-print " --> Successfully saved photon systematics as pkl file: %s/outdir_%s/calcPhotonSyst/pkl/%s.pkl"%(swd__,opt.ext,opt.cat)
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Output dataFrame as pickle file to be read in by signalFit.py
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if not os.path.isdir("%s/outdir_%s"%(swd__,opt.ext)): os.system("mkdir %s/outdir_%s"%(swd__,opt.ext))
+  if not os.path.isdir("%s/outdir_%s/calcPhotonSyst"%(swd__,opt.ext)): os.system("mkdir %s/outdir_%s/calcPhotonSyst"%(swd__,opt.ext))
+  if not os.path.isdir("%s/outdir_%s/calcPhotonSyst/pkl"%(swd__,opt.ext)): os.system("mkdir %s/outdir_%s/calcPhotonSyst/pkl"%(swd__,opt.ext))
+  with open("%s/outdir_%s/calcPhotonSyst/pkl/%s.pkl"%(swd__,opt.ext,opt.cat),"wb") as f: pickle.dump(data,f) 
+  print " --> Successfully saved photon systematics as pkl file: %s/outdir_%s/calcPhotonSyst/pkl/%s.pkl"%(swd__,opt.ext,opt.cat)
+
+  return True
+
+def main():
+  (opt,args) = get_options()
+  calcPhotonSyst(opt)
+
+if __name__=="__main__":
+  main()

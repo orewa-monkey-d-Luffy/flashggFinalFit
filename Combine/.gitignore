@@ -1,0 +1,9 @@
+*.root
+*.png
+*.pdf
+
+run_*.sh
+
+
+t2w_jobs/
+runFits_*/

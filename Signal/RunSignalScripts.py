@@ -31,12 +31,15 @@ def leave():
 # Extract options from config file:
 options = od()
 if opt.inputConfig != '':
+  print('reading config')
   if os.path.exists( opt.inputConfig ):
 
     #copy file to have common name and then import cfg options (dict)
     os.system("cp %s config.py"%opt.inputConfig)
     from config import signalScriptCfg
     _cfg = signalScriptCfg
+
+    print(_cfg)
 
     #Extract options
     options['inputWSDir']   = _cfg['inputWSDir']
@@ -62,7 +65,7 @@ if opt.inputConfig != '':
     options['printOnly']               = opt.printOnly
   
     #Delete copy of file
-    os.system("rm config.py")
+    #os.system("rm config.py")
   
   else:
     print "[ERROR] %s config file does not exist. Leaving..."%opt.inputConfig

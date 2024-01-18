@@ -90,6 +90,7 @@ for year in years:
     # Mapping to STXS definition here
     _procOriginal = proc
     _proc = "%s_%s_%s"%(procToDatacardName(proc),year,decayMode)
+    #_proc_s0 = procToData(proc.split("_")[0])
     _proc_s0 = procToData(proc)
 
     # Define category: add year tag if not merging
@@ -97,7 +98,9 @@ for year in years:
     else: _cat = "%s_%s"%(opt.cat,year)
 
     # Input flashgg ws 
-    _inputWSFile = glob.glob("%s/*M%s*_%s.root"%(inputWSDirMap[year],opt.mass,proc))[0]
+    filename = "%s/*M%s*_%s.root"%(inputWSDirMap[year],opt.mass,proc)
+    print(filename)
+    _inputWSFile = glob.glob(filename)[0]
     _nominalDataName = "%s_%s_%s_%s"%(_proc_s0,opt.mass,sqrts__,opt.cat)
 
     # If opt.skipZeroes check nominal yield if 0 then do not add
@@ -105,6 +108,7 @@ for year in years:
     if opt.skipZeroes:
       f = ROOT.TFile(_inputWSFile)
       w = f.Get(inputWSName__)
+      print(_nominalDataName)
       sumw = w.data(_nominalDataName).sumEntries()
       if sumw == 0.: skipProc = True
       w.Delete()
@@ -112,7 +116,7 @@ for year in years:
     if skipProc: continue
 
     # Input model ws 
-    if opt.cat == "NOTAG": _modelWSFile, _model = '-', '-'
+    if opt.cat == "NoTag": _modelWSFile, _model = '-', '-'
     else:
       _modelWSFile = "%s/CMS-HGG_sigfit_%s_%s.root"%(opt.sigModelWSDir,opt.sigModelExt,_cat)
       _model = "%s_%s:%s_%s"%(outputWSName__,sqrts__,outputWSObjectTitle__,_id)
@@ -125,7 +129,7 @@ for year in years:
     data.loc[len(data)] = [year,'sig',_procOriginal,_proc,_proc_s0,_cat,_inputWSFile,_nominalDataName,_modelWSFile,_model,_rate]
 
 # Background and data processes
-if( not opt.skipBkg)&( opt.cat != "NOTAG" ):
+if( not opt.skipBkg)&( opt.cat != "NoTag" ):
   _proc_bkg = "bkg_mass"
   _proc_data = "data_obs"
   if opt.mergeYears:
@@ -177,8 +181,8 @@ if opt.doSystematics:
   #  * s_w: symmetric (single) weight in nominal RooDataSet (1 column in dataframe)
   experimentalFactoryType = {}
   theoryFactoryType = {}
-  # No experimental systematics for NOTAG
-  if opt.cat != "NOTAG":
+  # No experimental systematics for NoTag
+  if opt.cat != "NoTag":
     for s in experimental_systematics: 
       if s['type'] == 'factory': 
 	# Fix for HEM as only in 2018 workspaces
@@ -205,7 +209,7 @@ if opt.doSystematics:
 totalSignalRows = float(data[data['type']=='sig'].shape[0])
 for ir,r in data[data['type']=='sig'].iterrows():
 
-  print " --> Extracting yields: (%s,%s) [%.3f/%.3f = %.1f%%]"%(r['proc'],r['cat'],float(ir),totalSignalRows,100*(float(ir+1)/totalSignalRows))
+  print " --> Extracting yields: (%s,%s) [%.1f%%]"%(r['proc'],r['cat'],100*(float(ir)/totalSignalRows))
 
   # Open input WS file and extract workspace
   f_in = ROOT.TFile(r.inputWSFile)
@@ -232,13 +236,12 @@ for ir,r in data[data['type']=='sig'].iterrows():
   data.at[ir,'nominal_yield'] = y
   data.at[ir,'sumw2'] = sumw2
   if not opt.skipCOWCorr: data.at[ir,'nominal_yield_COWCorr'] = y_COWCorr
-  print "\t\t ==> nominal_yield = %f " % (y*_rate/1000.)
 
   # Systematics: loop over systematics and use function to extract yield variations
   if opt.doSystematics:
 
-    # For experimental systematics: skip NOTAG events
-    if "NOTAG" not in r['cat']:
+    # For experimental systematics: skip NoTag events
+    if "NoTag" not in r['cat']:
       # Skip centralObjectWeight correction as concerns events in acceptance
       experimentalSystYields = calcSystYields(r['nominalDataName'],contents,inputWS,experimentalFactoryType,skipCOWCorr=True,proc=r['proc'],year=r['year'],ignoreWarnings=opt.ignore_warnings)
       for s,f in experimentalFactoryType.iteritems():

@@ -357,7 +357,15 @@ def plotSplines(_finalModel,_outdir="./",_nominalMass='125',splinesToPlot=['xs',
   # Get value at nominal mass
   xnom = od()
   _finalModel.MH.setVal(float(_nominalMass))
-  for sp in splinesToPlot: xnom[sp] = _finalModel.Splines[sp].getVal()
+  # check if splines exist
+  tmpSplinesToPlot = []
+  for sp in splinesToPlot:
+    if sp not in _finalModel.Splines:
+      print('%s not in Splines. Removing from the list!!'%sp)
+    else: tmpSplinesToPlot.append(sp)
+  splinesToPlot = tmpSplinesToPlot[:]
+  for sp in splinesToPlot:
+    xnom[sp] = _finalModel.Splines[sp].getVal()
   _finalModel.intLumi.setVal(lumiScaleFactor*float(lumiMap[_finalModel.year]))
   xnom['norm'] = _finalModel.Functions['final_normThisLumi'].getVal()
   # Loop over mass points
@@ -399,7 +407,8 @@ def plotSplines(_finalModel,_outdir="./",_nominalMass='125',splinesToPlot=['xs',
   leg.SetLineColor(0)
   leg.SetTextSize(0.04)
   # Draw graphs
-  for x, gr in grs.iteritems(): 
+  for x, gr in grs.iteritems():
+    if x not in splinesToPlot: continue
     gr.SetLineColor(colorMap[x])
     gr.SetMarkerColor(colorMap[x])
     gr.SetMarkerStyle(20)
