@@ -99,6 +99,31 @@
                     "production_mode": "zh_ALT_0PM"
                 }
             }
+        },
+        "2016": {
+            "ntuples": "/eos/user/r/rsaradhy/vh_anomalous/2023_10_06_VH_Sys_v3_XS1_BDTv3/UL16/raw/sig", 
+            "path_to_workspaces": "/eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2016", 
+            "path_to_hadd": "/eos/user/b/bjoshi/VHAnomalous/ntuples/Nov23/2016", 
+            "samples": {
+                "WHiggs0Mf05ph0ToGG": {
+                    "production_mode": "wh_ALT_0Mf05"
+                }, 
+                "WHiggs0MToGG": {
+                    "production_mode": "wh_ALT_0M"
+                }, 
+                "WHiggs0PMToGG": {
+                    "production_mode": "wh_ALT_0PM"
+                },
+                "ZHiggs0Mf05ph0ToGG": {
+                    "production_mode": "zh_ALT_0Mf05"
+                }, 
+                "ZHiggs0MToGG": {
+                    "production_mode": "zh_ALT_0M"
+                }, 
+                "ZHiggs0PMToGG": {
+                    "production_mode": "zh_ALT_0PM"
+                }
+            }
         }
     }, 
     "data": {

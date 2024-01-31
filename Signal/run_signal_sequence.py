@@ -6,8 +6,10 @@ from multiprocessing import Pool
 from contextlib import closing
 
 #YEARS = ['2016preVFP', '2016postVFP', '2017', '2018']
-YEARS = ['2018']
-CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_ZH_LEP_Tag0', 'RECO_ZH_LEP_Tag1']
+YEARS = ['2016']
+#CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_ZH_LEP_Tag0', 'RECO_ZH_LEP_Tag1']
+#CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3']
+CATEGORIES = ['RECO_ZH_LEP_Tag0', 'RECO_ZH_LEP_Tag1']
 
 logname = 'run_signal_sequence.log'
 os.system('rm %s'%logname)
@@ -91,12 +93,13 @@ class LocalOptions(object):
                 'useDiagonalProcForShape': False,
                 'skipVertexScenarioSplit': False,
                 'skipZeroes': True,
-                'replacementThreshold': 50,
+                'replacementThreshold': 10,
                 'beamspotWidthData': 3.4,
                 'beamspotWidthMC': 5.14,
                 'MHPolyOrder': 1,
                 'skipSystematics': False,
-                'useDiagonalProcForSyst': True
+                'useDiagonalProcForSyst': True,
+                'skipBeamspotReweigh': True
             }
         
         for key in tmpopt.keys():
@@ -198,6 +201,8 @@ def run_signalFit(tag, ext, print_only=True):
         processes_ = ntuples['signal'][y]['samples']
         proc_list = []
         for proc in processes_:
+            print(proc)
+            if '0Mf' not in proc: continue
             prod_mode_ = processes_[proc]['production_mode']
             
             for cat_ in CATEGORIES:
@@ -212,8 +217,8 @@ def run_signalFit(tag, ext, print_only=True):
                     opt_args[-1].opt['year'] = y
                     opt_args[-1].set_options()
 
-    signalFit(opt_args[0])
-    #with closing(Pool(8)) as mpl:
+    for args in opt_args: signalFit(opt_args[0])
+    # with closing(Pool(8)) as mpl:
     #    mpl.map(signalFit, opt_args)
     #    mpl.terminate() 
 
@@ -224,7 +229,7 @@ def run_signalFit(tag, ext, print_only=True):
 @click.option('--ext', default='2023_11_10', help='Extension')
 @click.option('--process', default='test', help='step in the signal sequence')
 def main(tag, ext, process):
-    #make_configs(tag, ext)
+    make_configs(tag, ext)
     if process=='signalFit': run_signalFit(tag, ext)
     else: run_step(tag, ext, process)
 
