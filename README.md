@@ -54,11 +54,10 @@ Each of the relevant folders are documented with specific `README.md` files. Som
 
 ## Instructions for VHLEP
 
-cd Tree2WS
-
 First, you need to create a json file, which will contain the list of processes (WHiggs0Mf05ph0ToGG, WHiggs0Mph0ToGG, WHiggs0PMph0ToGG, ZHiggs0Mf05ph0ToGG, ZHiggs0Mph0ToGG and ZHiggs0PMph0ToGG) and the path to nutples and their respective workspaces. To generate a json file, run the following command
 
 ```
+cd Tree2WS;
 python run_ws.py --process make_json --tag Feb24
 ```
 
