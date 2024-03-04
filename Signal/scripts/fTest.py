@@ -57,7 +57,7 @@ def fTest(opt):
     if not os.path.isdir("%s/outdir_%s/fTest/Plots"%(swd__,opt.ext)): os.system("mkdir %s/outdir_%s/fTest/Plots"%(swd__,opt.ext))
 
   # Load xvar to fit
-  nominalWSFileName = glob.glob("%s/allSignal*"%(opt.inputWSDir))[0]
+  nominalWSFileName = glob.glob("%s/output*"%(opt.inputWSDir))[0]
   print('opening %s' % nominalWSFileName)
   f0 = ROOT.TFile(nominalWSFileName,"read")
   print("getting workspace %s" % inputWSName__)
@@ -79,7 +79,7 @@ def fTest(opt):
   procYields = od()
   for proc in opt.procs.split(","):
     WSDir = "%s/output*M%s*%s.root"%(opt.inputWSDir,opt.mass,proc)
-    #print(WSDir)
+    print(WSDir)
     WSFileName = glob.glob(WSDir)[0]
     f = ROOT.TFile(WSFileName,"read")
     inputWS = f.Get(inputWSName__)

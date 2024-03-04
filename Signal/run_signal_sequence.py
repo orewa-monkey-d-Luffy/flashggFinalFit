@@ -1,4 +1,4 @@
-import os
+import os, sys
 import click
 import json
 import logging
@@ -6,10 +6,11 @@ from multiprocessing import Pool
 from contextlib import closing
 
 #YEARS = ['2016preVFP', '2016postVFP', '2017', '2018']
-YEARS = ['2016']
-#CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_ZH_LEP_Tag0', 'RECO_ZH_LEP_Tag1']
-#CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3']
-CATEGORIES = ['RECO_ZH_LEP_Tag0', 'RECO_ZH_LEP_Tag1']
+#YEARS = ['2016preVFP', '2017']
+YEARS = ['2016postVFP']
+CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_ZH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_WH_LEP_Tag4', 'RECO_WH_LEP_Tag5', 'RECO_ZH_LEP_Tag1', 'RECO_ZH_LEP_Tag2']
+#CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_ZH_LEP_Tag0', 'RECO_ZH_LEP_Tag1', 'RECO_ZH_LEP_Tag2']
+#CATEGORIES = ['RECO_WH_LEP_Tag4', 'RECO_WH_LEP_Tag5']
 
 logname = 'run_signal_sequence.log'
 os.system('rm %s'%logname)
@@ -43,9 +44,10 @@ class LocalOptions(object):
                 'doPlots': False,           # Produce Signal fTest plots
                 'threshold': 30,            # Threshold number of events
                 'nGaussMax': 5,             # Max number of gaussians to test
-                'skipWV': False,            # Skip processing WV case
+                'skipWV': True,            # Skip processing WV case
                 'minimizerMethod': 'TNC',   # (Scipy) Minimizer method
-                'minimizerTolerance': 1e-8  # (Scipy) Minimizer toleranve
+                'minimizerTolerance': 1e-8, # (Scipy) Minimizer toleranve
+                'xvar': 'CMS_hgg_mass'      # Observable
                 }
         elif self.process=='calcPhotonSyst':
             tmpopt = {
@@ -73,6 +75,39 @@ class LocalOptions(object):
                 'nRV': 3,
                 'nWV': 1,
             }
+        elif self.process=='plot':
+            tmpopt = {
+                'procs': 'all',
+                'years': '2016',
+                'cats': '',
+                'inputWSDir':'',
+                'loadCatWeights': '',
+                'ext': 'test',
+                'xvar': 'CMS_hgg_mass:m_{#gamma#gamma}',
+                'mass': '125',
+                'MH': '125',
+                'nBins': 160,
+                'pdf_nBins': 3200,
+                'threshold': 0.001,
+                'translateCats': None,
+                'translateProcs': None,
+                'label': 'Simulation',
+                'doFWHM': False,
+                'outdir': ''
+            }
+        elif self.process=='package':
+            tmpopt = {
+                'cats':'auto',
+                'inputWSDir':'',
+                'exts':'',
+                'outputExt':'packaged',
+                'massPoints': '120,125,130',
+                'mergeYears':False,
+                'year':'2016',
+                'batch':'condor',
+                'queue':'espresso',
+                'jobOpts':''
+            }
         elif self.process=='signalFit':
             tmpopt = {
                 'proc':  '',           # Signal process
@@ -90,10 +125,10 @@ class LocalOptions(object):
                 'doVoigtian': False,
                 'useDCB': False,
                 'doEffAccFromJson': True,
-                'useDiagonalProcForShape': False,
-                'skipVertexScenarioSplit': False,
+                'useDiagonalProcForShape': True,
+                'skipVertexScenarioSplit': True,
                 'skipZeroes': True,
-                'replacementThreshold': 10,
+                'replacementThreshold': 5,
                 'beamspotWidthData': 3.4,
                 'beamspotWidthMC': 5.14,
                 'MHPolyOrder': 1,
@@ -135,7 +170,7 @@ def make_configs(tag, ext):
             for l in lines:
                 f_.write(l)
 
-def run_step(tag, ext, process, print_only=True):
+def run_step(tag, ext, process, print_only=False):
 
     # get the workspace directory from ntuple json
     filename = '../Trees2WS/ntuples_%s.json'%(tag)
@@ -167,20 +202,32 @@ def run_step(tag, ext, process, print_only=True):
         wsdir = ntuples['signal'][y]['path_to_workspaces']
         processes_ = ntuples['signal'][y]['samples']
         proc_list = []
-        for proc in processes_: proc_list.append(processes_[proc]['production_mode'])
+        for proc in processes_:
+            print('Adding process: ', proc)
+            proc_list.append(processes_[proc]['production_mode'])
         for cat_ in CATEGORIES:
-                opt_args.append(LocalOptions(process))
-                opt_args[-1].opt['cat'] = cat_
-                opt_args[-1].opt['procs'] = ','.join(proc_list)
-                opt_args[-1].opt['ext'] = '_'.join([tag,y,ext])
-                opt_args[-1].opt['inputWSDir'] = wsdir
-                opt_args[-1].set_options()
+            opt_args.append(LocalOptions(process))
+            opt_args[-1].opt['cat'] = cat_
+            opt_args[-1].opt['procs'] = ','.join(proc_list)
+            opt_args[-1].opt['ext'] = '_'.join([tag,y,ext])
+            opt_args[-1].opt['inputWSDir'] = wsdir
+            opt_args[-1].set_options()
+    
+    if print_only:
+        print('-'*30)
+        print(' '*10+'print mode')
+        print('-'*30)
+    for args in opt_args:
+        if print_only:
+            sys.stdout.write(func.__name__+'.py ')
+            for k in args.opt.keys():
+                sys.stdout.write('--{} {} '.format(k, args.opt[k]))
+        else: func(args)
+    # with closing(Pool(8)) as mpl:
+    #     mpl.map(func, opt_args)
+    #     mpl.terminate()
 
-    with closing(Pool(8)) as mpl:
-        mpl.map(func, opt_args)
-        mpl.terminate()
-
-def run_signalFit(tag, ext, print_only=True):
+def run_signalFit(tag, ext, print_only=False):
 
     from scripts.signalFit import signalFit
     process = 'signalFit'
@@ -201,8 +248,6 @@ def run_signalFit(tag, ext, print_only=True):
         processes_ = ntuples['signal'][y]['samples']
         proc_list = []
         for proc in processes_:
-            print(proc)
-            if '0Mf' not in proc: continue
             prod_mode_ = processes_[proc]['production_mode']
             
             for cat_ in CATEGORIES:
@@ -216,8 +261,9 @@ def run_signalFit(tag, ext, print_only=True):
                     opt_args[-1].opt['outdir'] = tag+'_'+ext
                     opt_args[-1].opt['year'] = y
                     opt_args[-1].set_options()
-
-    for args in opt_args: signalFit(opt_args[0])
+    
+    for arg in opt_args: signalFit(arg)
+    #for args in opt_args: signalFit(args)
     # with closing(Pool(8)) as mpl:
     #    mpl.map(signalFit, opt_args)
     #    mpl.terminate() 
@@ -228,10 +274,11 @@ def run_signalFit(tag, ext, print_only=True):
 @click.option('--tag', default='tmp', help='tag')
 @click.option('--ext', default='2023_11_10', help='Extension')
 @click.option('--process', default='test', help='step in the signal sequence')
-def main(tag, ext, process):
+@click.option('--print_only', is_flag=True, help='print_only option')
+def main(tag, ext, process, print_only):
     make_configs(tag, ext)
     if process=='signalFit': run_signalFit(tag, ext)
-    else: run_step(tag, ext, process)
+    else: run_step(tag, ext, process, print_only)
 
 if __name__=="__main__":
     main()

@@ -7,7 +7,8 @@ import ROOT
 
 from commonTools import dataToProc
 
-YEARS = ['2016preVFP', '2016postVFP', '2017', '2018']
+#YEARS = ['2016preVFP','2016postVFP', '2017', '2018']
+YEARS = ['2018']
 
 logname = 'run_ws.log'
 os.system('rm %s'%logname)
@@ -19,7 +20,7 @@ logging.basicConfig(filename=logname,
 logging.info("Running Script")
 logger = logging.getLogger('urbanGUI')
 
-def make_json(tag):
+def make_json(tag, print_only=False):
    ntuples = {}
    for st in ['signal', 'data']:
        ntuples[st] = {}
@@ -39,7 +40,7 @@ def make_json(tag):
            else:
                ntuples[st][y] = {'ntuples':'',
                'path_to_hadd':'/eos/user/b/bjoshi/VHAnomalous/ntuples/{}/{}'.format(tag,y),
-               'path_to_worksapce':'/eos/user/b/bjoshi/VHAnomalous/workspaces/{}/{}'.format(tag,y)}
+               'path_to_workspaces':'/eos/user/b/bjoshi/VHAnomalous/workspaces/{}/{}'.format(tag,y)}
    
    with open('ntuples_{}.json'.format(tag),'w') as f_:
        json.dump(ntuples, f_, indent=4)
@@ -96,7 +97,7 @@ def hadd_files(tag, print_only=True):
         if print_only: print(cmd)
         else: os.system(cmd)
 
-def make_workspaces(ntuple_json, config, year, sample_type, print_only=True):
+def make_workspaces(ntuple_json, config, year, sample_type, print_only=False):
    
     with open(ntuple_json, 'rb') as f_:
        ntuples = json.load(f_)
@@ -115,6 +116,9 @@ def make_workspaces(ntuple_json, config, year, sample_type, print_only=True):
             if not os.path.exists(inputTreeFile_):
                 logging.error('%s file not found!' % inputTreeFile_)
                 continue
+            
+            if not os.path.exists(path_to_workspaces):
+                os.system('mkdir -p {}'.format(path_to_workspaces))
             
             cmd = 'python trees2ws.py --inputConfig {} '.format(config)
             cmd += '--inputTreeFile {} '.format(inputTreeFile_)

@@ -256,7 +256,8 @@ def signalFit(opt):
         f.Close()
       # Check if replacement dataset has too few entries: if so throw error
       if( datasetWVForFit[MHNominal].numEntries() < opt.replacementThreshold )|( datasetWVForFit[MHNominal].sumEntries() < 0. ):
-        print " --> [ERROR] replacement dataset (%s,%s) has too few entries (%g < %g)"%(procReplacementFit,catReplacementFit,datasetWVForFit[MHNominal].numEntries,opt.replacementThreshold)
+        print(datasetWVForFit[MHNominal].numEntries(),opt.replacementThreshold)
+        print " --> [ERROR] replacement dataset (%s,%s) has too few entries (%g < %g)"%(procReplacementFit,catReplacementFit,datasetWVForFit[MHNominal].numEntries(),opt.replacementThreshold)
         sys.exit(1)
       else:
         procWVFit, catWVFit = procReplacementFit, catReplacementFit
@@ -338,6 +339,9 @@ def signalFit(opt):
   
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # SAVE: to output workspace
+  path_to_output = "%s/outdir_%s/signalFit/output"%(swd__,opt.ext)
+  if not os.path.exists(path_to_output):
+      os.system('mkdir -p {}'.format(path_to_output))
   foutDir = "%s/outdir_%s/signalFit/output"%(swd__,opt.ext)
   foutName = "%s/outdir_%s/signalFit/output/CMS-HGG_sigfit_%s_%s_%s_%s.root"%(swd__,opt.ext,opt.ext,opt.proc,opt.year,opt.cat)
   print "\n --> Saving output workspace to file: %s"%foutName
