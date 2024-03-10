@@ -6,7 +6,7 @@ backgroundScriptCfg = {
     'inputWSDir':'/eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/Combined', # location of 'allData.root' file
     'cats':'auto', # auto: automatically inferred from input ws
     'catOffset':0, # add offset to category numbers (useful for categories from different allData.root files)  
-    'ext':'2023-11-13_combined', # extension to add to output directory
+    'ext':'Mar24__combined_2024_03_06', # extension to add to output directory
     'year':'combined', # Use combined when merging all years in category (for plots)
     'xvar': 'CMS_hgg_mass', # not yet used, should be passed to the C++ macros
     'plotdir': 'plots',

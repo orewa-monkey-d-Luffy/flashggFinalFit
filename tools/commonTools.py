@@ -132,14 +132,16 @@ procToDataMap['VBF_ALT_L1Zgf05'] = 'vbf_ALT_L1Zgf05'
 procToDataMap['VH'] = 'wzh'
 procToDataMap['WMINUSH2HQQ'] = 'wh'
 procToDataMap['WPLUSH2HQQ'] = 'wh'
-procToDataMap['WH_ALT0L1f05ph0'] = 'wh_ALT_L1f05'
-procToDataMap['WH_ALT0PHf05ph0'] = 'wh_ALT_0PHf05'
+procToDataMap['WH_ALT_0L1f05ph0'] = 'wh_ALT_L1f05'
+procToDataMap['WH_ALT_0PHf05ph0'] = 'wh_ALT_0PHf05'
 procToDataMap['WH_ALT_0PM'] = 'wh_ALT0PM'
 procToDataMap['WH_ALT_0M'] = 'wh_ALT0M'
 procToDataMap['WH_ALT_0Mf05'] = 'wh_ALT0Mf05'
 procToDataMap['ZH_ALT_0Mf05'] = 'zh_ALT0Mf05'
 procToDataMap['ZH_ALT_0PM'] = 'zh_ALT0PM'
 procToDataMap['ZH_ALT_0M'] = 'zh_ALT0M'
+
+
 procToDataMap['ZH'] = 'zh'
 
 procToDataMap['QQ2HLNU'] = 'wh'

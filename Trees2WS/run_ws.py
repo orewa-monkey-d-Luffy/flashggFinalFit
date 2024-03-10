@@ -7,8 +7,7 @@ import ROOT
 
 from commonTools import dataToProc
 
-#YEARS = ['2016preVFP','2016postVFP', '2017', '2018']
-YEARS = ['2018']
+YEARS = ['2016preVFP','2016postVFP', '2017', '2018']
 
 logname = 'run_ws.log'
 os.system('rm %s'%logname)
@@ -24,19 +23,28 @@ def make_json(tag, print_only=False):
    ntuples = {}
    for st in ['signal', 'data']:
        ntuples[st] = {}
-       for y in YEARS:
+       for y in YEARS+['combined']:
            if st=='signal':
                ntuples[st][y] = {
                 'ntuples':'', 'samples': {},
                'path_to_workspaces': '/eos/user/b/bjoshi/VHAnomalous/workspaces/{}/{}'.format(tag,y),
                'path_to_hadd':'/eos/user/b/bjoshi/VHAnomalous/ntuples/{}/{}'.format(tag,y)
                }
-               ntuples[st][y]['samples']['WHiggs0Mf05ph0ToGG'] = {'production_mode':'wh_ALT_0Mf05'}
-               ntuples[st][y]['samples']['WHiggs0PMToGG']      = {'production_mode':'wh_ALT_0PM'}
-               ntuples[st][y]['samples']['WHiggs0MToGG']       = {'production_mode':'wh_ALT_0M'}
-               ntuples[st][y]['samples']['ZHiggs0Mf05ph0ToGG'] = {'production_mode':'zh_ALT_0Mf05'}
-               ntuples[st][y]['samples']['ZHiggs0PMToGG']      = {'production_mode':'zh_ALT_0PM'}
-               ntuples[st][y]['samples']['ZHiggs0MToGG']       = {'production_mode':'zh_ALT_0M'}
+               ntuples[st][y]['samples']['WHiggs0Mf05ph0ToGG']  = {'production_mode':'wh_ALT_0Mf05'}
+               ntuples[st][y]['samples']['WHiggs0PMToGG']       = {'production_mode':'wh_ALT_0PM'}
+               ntuples[st][y]['samples']['WHiggs0MToGG']        = {'production_mode':'wh_ALT_0M'}
+               ntuples[st][y]['samples']['ZHiggs0Mf05ph0ToGG']  = {'production_mode':'zh_ALT_0Mf05'}
+               ntuples[st][y]['samples']['ZHiggs0PMToGG']       = {'production_mode':'zh_ALT_0PM'}
+               ntuples[st][y]['samples']['ZHiggs0MToGG']        = {'production_mode':'zh_ALT_0M'}
+               ntuples[st][y]['samples']['WHiggs0L1ToGG']       = {'production_mode': 'wh_ALT_0L1'}
+               ntuples[st][y]['samples']['WHiggs0L1f05ph0ToGG'] = {'production_mode': 'wh_ALT_0L1f05'}
+               ntuples[st][y]['samples']['WHiggs0PHToGG']       = {'production_mode': 'wh_ALT_0PH'}
+               ntuples[st][y]['samples']['WHiggs0PHf05ph0ToGG'] = {'production_mode': 'wh_ALT_0PHf05'}
+               ntuples[st][y]['samples']['ZHiggs0L1ToGG']       = {'production_mode': 'zh_ALT_0L1'}
+               ntuples[st][y]['samples']['ZHiggs0L1f05ph0ToGG'] = {'production_mode': 'zh_ALT_0L1f05'}
+               ntuples[st][y]['samples']['ZHiggs0PHToGG']       = {'production_mode': 'zh_ALT_0PH'}
+               ntuples[st][y]['samples']['ZHiggs0PHf05ph0ToGG'] = {'production_mode': 'zh_ALT_0PHf05'}
+
            else:
                ntuples[st][y] = {'ntuples':'',
                'path_to_hadd':'/eos/user/b/bjoshi/VHAnomalous/ntuples/{}/{}'.format(tag,y),
@@ -67,7 +75,7 @@ def hadd_files(tag, print_only=True):
         
         for sig in ntuples['signal'][y]['samples'].keys():
             sig = sig.encode()
-            filename = '{}/output_{}_M125_TuneCP5_13TeV-JHUGenV7011-pythia8.root'.format(outDir, sig)
+            filename = '{}/output_{}-JHUGenV7011-pythia8.root'.format(outDir, sig)
             filelist = [ '%s/%s' % (ntp,f) for f in os.listdir(ntp) if sig in f ]
             cmd = 'hadd -f %s '%filename
             #check if files exist
@@ -102,9 +110,9 @@ def make_workspaces(ntuple_json, config, year, sample_type, print_only=False):
     with open(ntuple_json, 'rb') as f_:
        ntuples = json.load(f_)
    
-    inDir = ntuples['signal'][year]['path_to_hadd']
+    inDir = ntuples[sample_type][year]['path_to_hadd']
     path_to_workspaces = ntuples[sample_type][year]['path_to_workspaces']
-
+    
     # if the sample_type is "signal" then iterate over all processed
     if sample_type=="signal":
         
@@ -120,7 +128,11 @@ def make_workspaces(ntuple_json, config, year, sample_type, print_only=False):
             if not os.path.exists(path_to_workspaces):
                 os.system('mkdir -p {}'.format(path_to_workspaces))
             
-            cmd = 'python trees2ws.py --inputConfig {} '.format(config)
+            cmd = ''
+
+            cmd += 'rootcp -r -c 1 {infile} {outfile};\nmv {outfile} {infile};\n'.format(infile=inputTreeFile_, outfile=inputTreeFile_.replace('.root','_new.root'))
+
+            cmd += 'python trees2ws.py --inputConfig {} '.format(config)
             cmd += '--inputTreeFile {} '.format(inputTreeFile_)
             cmd += '--productionMode {} '.format(prod_mode_)
             cmd += '--year {} '.format(year)
@@ -160,6 +172,18 @@ def make_all_workspaces(config, tag, print_only):
     for st in ['signal','data']:
         for year in YEARS:
             make_workspaces(ntuple_json, config, year, st, print_only)
+    
+    ntpdir = '/eos/user/b/bjoshi/VHAnomalous/ntuples'
+    cmd = 'hadd {ntpdir}/{tag}/combined/output_data_combined.root {ntpdir}/{tag}/2016preVFP/output_data_2016preVFP.root {ntpdir}/{tag}/2016postVFP/output_data_2016postVFP.root {ntpdir}/{tag}/2017/output_data_2017.root {ntpdir}/{tag}/2018/output_data_2018.root'.format(tag=tag, ntpdir=ntpdir) # create a directory and combine all the years using hadd
+    if not print_only:
+        os.system('mkdir /eos/user/b/bjoshi/VHAnomalous/ntuples/combined/')    
+        os.system(cmd)
+    else:
+        print('\n\nmkdir /eos/user/b/bjoshi/VHAnomalous/ntuples/combined/;')
+        print(cmd)
+    
+    make_workspaces(ntuple_json, config, 'combined', 'data', print_only)
+    
 
 @click.command()
 @click.option('--process'    , default='make_json'     ,      help='Number of greetings.')

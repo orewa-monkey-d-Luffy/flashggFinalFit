@@ -5,12 +5,9 @@ import logging
 from multiprocessing import Pool
 from contextlib import closing
 
-#YEARS = ['2016preVFP', '2016postVFP', '2017', '2018']
-#YEARS = ['2016preVFP', '2017']
-YEARS = ['2016postVFP']
-CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_ZH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_WH_LEP_Tag4', 'RECO_WH_LEP_Tag5', 'RECO_ZH_LEP_Tag1', 'RECO_ZH_LEP_Tag2']
-#CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_ZH_LEP_Tag0', 'RECO_ZH_LEP_Tag1', 'RECO_ZH_LEP_Tag2']
-#CATEGORIES = ['RECO_WH_LEP_Tag4', 'RECO_WH_LEP_Tag5']
+YEARS = ['2016preVFP', '2016postVFP', '2017', '2018']
+#CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_ZH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_WH_LEP_Tag4', 'RECO_WH_LEP_Tag5', 'RECO_ZH_LEP_Tag1', 'RECO_ZH_LEP_Tag2']
+CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_ZH_LEP_Tag0', 'RECO_ZH_LEP_Tag1']
 
 logname = 'run_signal_sequence.log'
 os.system('rm %s'%logname)
@@ -222,6 +219,7 @@ def run_step(tag, ext, process, print_only=False):
             sys.stdout.write(func.__name__+'.py ')
             for k in args.opt.keys():
                 sys.stdout.write('--{} {} '.format(k, args.opt[k]))
+            sys.stdout.write('\n\n')
         else: func(args)
     # with closing(Pool(8)) as mpl:
     #     mpl.map(func, opt_args)

@@ -27,12 +27,19 @@ globalXSBRMap['example']['BBH'] = {'mode':'bbH'}
 globalXSBRMap['example']['THQ'] = {'mode':'tHq'}
 globalXSBRMap['example']['THW'] = {'mode':'tHW'}
 #globalXSBRMap['example']['wh'] = {'mode':'constant','factor':1}
-globalXSBRMap['example']['wh_ALT_0M'] = {'mode':'constant','factor':0.00227}#{'mode':'constant','factor':0.00543}
-globalXSBRMap['example']['wh_ALT_0Mf05'] = {'mode':'constant','factor':0.00227}
-globalXSBRMap['example']['wh_ALT_0PM'] = {'mode':'constant','factor':0.00227}
-globalXSBRMap['example']['zh_ALT_0M'] = {'mode':'constant','factor':0.00227}#{'mode':'constant','factor':0.00543}
-globalXSBRMap['example']['zh_ALT_0Mf05'] = {'mode':'constant','factor':0.00227}
-globalXSBRMap['example']['zh_ALT_0PM'] = {'mode':'constant','factor':0.00227}
+# globalXSBRMap['example']['wh_ALT_0M'] = {'mode':'constant','factor':0.00227} #{'mode':'constant','factor':0.00543}
+# globalXSBRMap['example']['wh_ALT_0Mf05'] = {'mode':'constant','factor':0.00227}
+# globalXSBRMap['example']['wh_ALT_0PM'] = {'mode':'constant','factor':0.00227}
+# globalXSBRMap['example']['zh_ALT_0M'] = {'mode':'constant','factor':0.00227} #{'mode':'constant','factor':0.00543}
+# globalXSBRMap['example']['zh_ALT_0Mf05'] = {'mode':'constant','factor':0.00227}
+# globalXSBRMap['example']['zh_ALT_0PM'] = {'mode':'constant','factor':0.00227}
+
+globalXSBRMap['example']['wh_ALT_0M'] = {'mode':'WH'} #{'mode':'constant','factor':0.00543}
+globalXSBRMap['example']['wh_ALT_0Mf05'] = {'mode':'WH'}
+globalXSBRMap['example']['wh_ALT_0PM'] = {'mode':'WH'}
+globalXSBRMap['example']['zh_ALT_0M'] = {'mode':'WH'} #{'mode':'constant','factor':0.00543}
+globalXSBRMap['example']['zh_ALT_0Mf05'] = {'mode':'WH'}
+globalXSBRMap['example']['zh_ALT_0PM'] = {'mode':'WH'}
 #globalXSBRMap['example'][''] = {'mode':'WH','factor':BR_W_lnu}#{'mode':'constant','factor':0.00543}
 # ...
 
