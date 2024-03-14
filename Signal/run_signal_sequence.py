@@ -260,11 +260,11 @@ def run_signalFit(tag, ext, print_only=False):
                     opt_args[-1].opt['year'] = y
                     opt_args[-1].set_options()
     
-    for arg in opt_args: signalFit(arg)
-    #for args in opt_args: signalFit(args)
-    # with closing(Pool(8)) as mpl:
-    #    mpl.map(signalFit, opt_args)
-    #    mpl.terminate() 
+    #for arg in opt_args: signalFit(arg)
+
+    with closing(Pool(8)) as mpl:
+        mpl.map(signalFit, opt_args)
+        mpl.terminate() 
 
 #hadd -f /eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2016postVFP/allSignal.root $(ls -1 /eos/user/b/bjoshi/VHAnomalous/workspaces/Nov23/2016postVFP/output_*pythia8*root)
 

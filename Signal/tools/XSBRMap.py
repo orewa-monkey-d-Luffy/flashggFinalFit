@@ -34,13 +34,21 @@ globalXSBRMap['example']['THW'] = {'mode':'tHW'}
 # globalXSBRMap['example']['zh_ALT_0Mf05'] = {'mode':'constant','factor':0.00227}
 # globalXSBRMap['example']['zh_ALT_0PM'] = {'mode':'constant','factor':0.00227}
 
-globalXSBRMap['example']['wh_ALT_0M'] = {'mode':'WH'} #{'mode':'constant','factor':0.00543}
+globalXSBRMap['example']['wh_ALT_0M'] = {'mode':'WH'}
 globalXSBRMap['example']['wh_ALT_0Mf05'] = {'mode':'WH'}
 globalXSBRMap['example']['wh_ALT_0PM'] = {'mode':'WH'}
-globalXSBRMap['example']['zh_ALT_0M'] = {'mode':'WH'} #{'mode':'constant','factor':0.00543}
-globalXSBRMap['example']['zh_ALT_0Mf05'] = {'mode':'WH'}
-globalXSBRMap['example']['zh_ALT_0PM'] = {'mode':'WH'}
-#globalXSBRMap['example'][''] = {'mode':'WH','factor':BR_W_lnu}#{'mode':'constant','factor':0.00543}
+globalXSBRMap['example']['wh_ALT_0L1'] = {'mode':'WH'}
+globalXSBRMap['example']['wh_ALT_0L1f05'] = {'mode':'WH'}
+globalXSBRMap['example']['wh_ALT_0PH'] = {'mode':'WH'}
+globalXSBRMap['example']['wh_ALT_0PHf05'] = {'mode':'WH'}
+
+globalXSBRMap['example']['zh_ALT_0M'] = {'mode':'ZH'}
+globalXSBRMap['example']['zh_ALT_0Mf05'] = {'mode':'ZH'}
+globalXSBRMap['example']['zh_ALT_0PM'] = {'mode':'ZH'}
+globalXSBRMap['example']['zh_ALT_0L1'] = {'mode':'ZH'}
+globalXSBRMap['example']['zh_ALT_0L1f05'] = {'mode':'ZH'}
+globalXSBRMap['example']['zh_ALT_0PH'] = {'mode':'ZH'}
+globalXSBRMap['example']['zh_ALT_0PHf05'] = {'mode':'ZH'}
 # ...
 
 # STXS analysis: add factor for bin composition
