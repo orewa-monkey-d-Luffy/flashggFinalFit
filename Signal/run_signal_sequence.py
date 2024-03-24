@@ -6,6 +6,7 @@ from multiprocessing import Pool
 from contextlib import closing
 
 YEARS = ['2016preVFP', '2016postVFP', '2017', '2018']
+#YEARS = ['2017', '2018']
 #CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_ZH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_WH_LEP_Tag4', 'RECO_WH_LEP_Tag5', 'RECO_ZH_LEP_Tag1', 'RECO_ZH_LEP_Tag2']
 CATEGORIES = ['RECO_WH_LEP_Tag0', 'RECO_WH_LEP_Tag1', 'RECO_WH_LEP_Tag2', 'RECO_WH_LEP_Tag3', 'RECO_ZH_LEP_Tag0', 'RECO_ZH_LEP_Tag1']
 
@@ -209,6 +210,8 @@ def run_step(tag, ext, process, print_only=False):
             opt_args[-1].opt['ext'] = '_'.join([tag,y,ext])
             opt_args[-1].opt['inputWSDir'] = wsdir
             opt_args[-1].set_options()
+            if process=='getEffAcc':
+                break
     
     if print_only:
         print('-'*30)

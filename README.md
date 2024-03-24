@@ -6,28 +6,37 @@ Slides from the flashgg tutorial series can be found [here](https://indico.cern.
 ## Download and setup instructions
 
 ```
-export SCRAM_ARCH=slc7_amd64_gcc700
-cmsrel CMSSW_10_2_13
-cd CMSSW_10_2_13/src
-cmsenv
-git cms-init
-
 # Install the GBRLikelihood package which contains the RooDoubleCBFast implementation
+cd $CMSSW_BASE/src
 git clone git@github.com:jonathon-langford/HiggsAnalysis.git
+cd $CMSSW_BASE/src
 
-# Install Combine as per the documentation here: cms-analysis.github.io/HiggsAnalysis-CombinedLimit/
-git clone git@github.com:cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
+#Install CombinedLimit
+cd $CMSSW_BASE/src
+git clone git@github.com:emanueledimarco/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
+cd HiggsAnalysis/CombinedLimit
+git checkout from-v8.1.0
+source env_standalone.sh 
+make -j 8; make
+cd $CMSSW_BASE/src
 
-# Install Combine Harvester for parallelizing fits
+
+#Install Combine Harvester
+cd $CMSSW_BASE/src
 git clone https://github.com/cms-analysis/CombineHarvester.git CombineHarvester
-
-# Compile external libraries
-cmsenv
+cd CombineHarvester/
+git checkout v2.0.0
 scram b -j 9
+cd $CMSSW_BASE/src
 
-# Install Flashgg Final Fit packages
-git clone -b dev_fggfinalfits_lite git@github.com:Higgs-Anomalous-Couplings/flashggFinalFit.git
+#install finalFits
+git clone git@github.com:bmjoshi/flashggFinalFit.git
+
 cd flashggFinalFit/
+
+
+cmsenv
+source setup.sh
 ```
 
 In every new shell run the following to add `tools/commonTools` and `tools/commonObjects` to your `${PYTHONPATH}`:
