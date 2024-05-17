@@ -8,7 +8,7 @@ Slides from the flashgg tutorial series can be found [here](https://indico.cern.
 ```
 # Install the GBRLikelihood package which contains the RooDoubleCBFast implementation
 cd $CMSSW_BASE/src
-git clone git@github.com:jonathon-langford/HiggsAnalysis.git -b vbfac-dev
+git clone git@github.com:jonathon-langford/HiggsAnalysis.git
 cd $CMSSW_BASE/src
 
 #Install CombinedLimit
@@ -30,7 +30,7 @@ scram b -j 9
 cd $CMSSW_BASE/src
 
 #install finalFits
-git clone git@github.com:bmjoshi/flashggFinalFit.git
+git clone git@github.com:bmjoshi/flashggFinalFit.git -b vbfac-dev
 
 cd flashggFinalFit/
 
